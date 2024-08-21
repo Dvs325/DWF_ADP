@@ -21,7 +21,7 @@ public class ProductoBean implements Serializable {
         productos.add(new Producto("Destornillador", "Juego de destornilladores", 15.0, "desarmadores.jpg"));
         productos.add(new Producto("Cierra", "Cierra manual de 30 cm", 30.0, "cierra.jpg"));
         productos.add(new Producto("Alicate", "Alicate de corte y agarre", 20.0, "alicate.jpg"));
-        productos.add(new Producto("Sierra Circular", "Sierra circular de 7 1/4\"", 90.0, "cierracircular.jpg"));
+        productos.add(new Producto("Cierra Circular", "Cierra circular de 7 1/4\"", 90.0, "cierracircular.jpg"));
         productos.add(new Producto("Lijadora", "Lijadora orbital de 200W", 40.0, "lijadora.jpg"));
         productos.add(new Producto("Esmeril", "Esmeril angular de 4\"", 60.0, "esmeril.jpg"));
         productos.add(new Producto("Aspiradora", "Aspiradora de taller 1200W", 70.0, "aspiradora.jpg"));
@@ -31,7 +31,7 @@ public class ProductoBean implements Serializable {
         productos.add(new Producto("Cinta Métrica", "Cinta métrica de 5 metros", 10.0, "cintametrica.jpg"));
         productos.add(new Producto("Nivel", "Nivel de burbuja de 24\"", 20.0, "nivel.jpg"));
         productos.add(new Producto("Destornillador Eléctrico", "Destornillador eléctrico recargable", 55.0, "destornilladorE.jpg"));
-        productos.add(new Producto("Sierra de Calar", "Sierra de calar con velocidad variable", 65.0, "cierracalar.jpg"));
+        productos.add(new Producto("Cierra de Calar", "Cierra de calar con velocidad variable", 65.0, "cierracalar.jpg"));
         productos.add(new Producto("Brocas", "Juego de brocas para metal y madera", 25.0, "brocas.jpg"));
         productos.add(new Producto("Trépano", "Trépano manual para perforaciones pequeñas", 22.0, "teprano.jpg"));
         productos.add(new Producto("Gato Hidráulico", "Gato hidráulico para levantamiento de hasta 2 toneladas", 90.0, "gato.jpg"));
