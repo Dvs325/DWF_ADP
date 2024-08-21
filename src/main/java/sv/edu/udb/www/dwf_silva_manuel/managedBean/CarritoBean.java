@@ -5,77 +5,75 @@ import jakarta.faces.bean.SessionScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import jakarta.faces.context.FacesContext;
-import java.io.IOException;
+import sv.edu.udb.www.dwf_silva_manuel.managedBean.Producto;
+import sv.edu.udb.www.dwf_silva_manuel.managedBean.ProductoEnCarrito;
 
 @ManagedBean(name = "carritoBean")
 @SessionScoped
 public class CarritoBean implements Serializable {
     private List<ProductoEnCarrito> productosEnCarrito;
     private double totalCarrito;
-    private double totalCarritoPrePago; // Para mantener el total antes del pago
 
     public CarritoBean() {
         productosEnCarrito = new ArrayList<>();
-        totalCarrito = 0.0;
-        totalCarritoPrePago = 0.0;
     }
 
     public List<ProductoEnCarrito> getProductosEnCarrito() {
         return productosEnCarrito;
     }
 
+    public double getTotalCarrito() {
+        calcularTotalCarrito();
+        return totalCarrito;
+    }
+
     public void agregarAlCarrito(Producto producto) {
-        productosEnCarrito.add(new ProductoEnCarrito(producto));
-        recalcularTotalCarrito();
+        for (ProductoEnCarrito productoEnCarrito : productosEnCarrito) {
+            if (productoEnCarrito.getProducto().equals(producto)) {
+                productoEnCarrito.setCantidad(productoEnCarrito.getCantidad() + 1);
+                calcularTotalCarrito();
+                return;
+            }
+        }
+        productosEnCarrito.add(new ProductoEnCarrito(producto, 1));
+        calcularTotalCarrito();
     }
 
     public void eliminarDelCarrito(ProductoEnCarrito productoEnCarrito) {
         productosEnCarrito.remove(productoEnCarrito);
-        recalcularTotalCarrito();
+        calcularTotalCarrito();
     }
 
-    private void recalcularTotalCarrito() {
-        totalCarrito = 0.0;
-        for (ProductoEnCarrito item : productosEnCarrito) {
-            totalCarrito += item.getProducto().getPrecio();
+    public void aumentarCantidad(ProductoEnCarrito productoEnCarrito) {
+        productoEnCarrito.setCantidad(productoEnCarrito.getCantidad() + 1);
+        calcularTotalCarrito();
+    }
+
+    public void disminuirCantidad(ProductoEnCarrito productoEnCarrito) {
+        if (productoEnCarrito.getCantidad() > 1) {
+            productoEnCarrito.setCantidad(productoEnCarrito.getCantidad() - 1);
+            calcularTotalCarrito();
         }
     }
 
-    public void procesarPago() {
-        try {
-            // Calcular el total antes de limpiar el carrito
-            totalCarritoPrePago = totalCarrito;
-
-            // Limpiar la lista de productos en el carrito
-            productosEnCarrito.clear();
-            recalcularTotalCarrito(); // Reinicializa el total del carrito a 0
-
-            // Redirigir a la página de confirmación
-            FacesContext.getCurrentInstance().getExternalContext().redirect("registroCompra.xhtml");
-        } catch (IOException e) {
-            e.printStackTrace();
+    private void calcularTotalCarrito() {
+        totalCarrito = 0;
+        for (ProductoEnCarrito productoEnCarrito : productosEnCarrito) {
+            totalCarrito += productoEnCarrito.getTotal();
         }
     }
 
-    public void seguirComprando() {
-        try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void vaciarCarrito() {
+        productosEnCarrito.clear();
+        totalCarrito = 0;
     }
 
-    public double getTotalCarrito() {
-        // Devuelve el total calculado antes del pago si la página actual es registroCompra.xhtml
-        String currentPage = FacesContext.getCurrentInstance().getViewRoot().getViewId();
-        if (currentPage != null && currentPage.contains("registroCompra.xhtml")) {
-            return totalCarritoPrePago;
-        }
-        return totalCarrito;
+    public String procesarPago() {
+        vaciarCarrito();
+        return "confirmacionCompra?faces-redirect=true";
     }
 
-    public void setTotalCarrito(double totalCarrito) {
-        this.totalCarrito = totalCarrito;
+    public String seguirComprando() {
+        return "index?faces-redirect=true";
     }
 }
